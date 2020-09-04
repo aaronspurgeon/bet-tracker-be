@@ -9,8 +9,7 @@ const router = express.Router({
 // PRODUCT ROUTES
 router.get("/bets", async (req, res, next) => {
   try {
-    const bets = await db("bet").select();
-
+    const bets = await betModel.findBetByUser(req.userId);
     res.status(200).json(bets);
   } catch (err) {
     next(err);
@@ -19,37 +18,17 @@ router.get("/bets", async (req, res, next) => {
 
 router.post("/bets", restricted, async (req, res, next) => {
   try {
-    const ids = await db("bet").insert(req.body, "id");
-    const newBet = await db("bet").where({ id: ids[0] }).first();
-
-    res.status(201).json({
-      message: `${newBet.id} successfully saved to the database!`,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/bets/:id", async (req, res, next) => {
-  try {
-    const bet = await db("bet").where({ id: req.params.id }).first();
-
-    res.status(200).json(bet);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.put("/bets/:id", restricted, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const bet = await mpModel.update(id, req.body);
-
+    const bet = await betModel.addBet(
+      { ...req.body, users_id: req.userId },
+      req.userId
+    );
     if (bet) {
-      res.json(bet);
+      res.status(201).json({
+        message: "Bet post created",
+      });
     } else {
-      res.status(404).json({
-        message: "Could not find a bet with the given ID",
+      res.status(500).json({
+        message: "Error saving bet, please try again later",
       });
     }
   } catch (err) {
@@ -57,21 +36,48 @@ router.put("/bets/:id", restricted, async (req, res, next) => {
   }
 });
 
-router.delete("/bets/:id", restricted, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const delBet = await mpModel.remove(id);
+// router.get("/bets/:id", async (req, res, next) => {
+//   try {
+//     const bet = await db("bet").where({ id: req.params.id }).first();
 
-    if (delBet) {
-      res.status(204).json({
-        message: "Bet deleted",
-      });
-    } else {
-      res.status(404).json({
-        message: "Could not find a bet with given ID",
-      });
-    }
-  } catch (err) {
-    next(err);
-  }
-});
+//     res.status(200).json(bet);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+// router.put("/bets/:id", restricted, async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const bet = await mpModel.update(id, req.body);
+
+//     if (bet) {
+//       res.json(bet);
+//     } else {
+//       res.status(404).json({
+//         message: "Could not find a bet with the given ID",
+//       });
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+// router.delete("/bets/:id", restricted, async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const delBet = await mpModel.remove(id);
+
+//     if (delBet) {
+//       res.status(204).json({
+//         message: "Bet deleted",
+//       });
+//     } else {
+//       res.status(404).json({
+//         message: "Could not find a bet with given ID",
+//       });
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// });

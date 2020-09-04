@@ -9,7 +9,7 @@ router.get("/", restricted, checkRole("User"), (req, res) => {
     .then((users) => {
       res.json(users);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => res.send(err, "here"));
 });
 
 router.get("/:id", restricted, checkRole("User"), (req, res) => {
@@ -17,7 +17,7 @@ router.get("/:id", restricted, checkRole("User"), (req, res) => {
     .then((user) => {
       res.json(user);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => res.send(err, "here"));
 });
 
 module.exports = router;

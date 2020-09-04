@@ -14,8 +14,13 @@ function remove(id) {
   return db("bet").where({ id }).del();
 }
 
+function findBetByUser(users_id) {
+  return db("bet").select().where({ user_id });
+}
+
 module.exports = {
   findById,
   update,
   remove,
+  findBetByUser,
 };
