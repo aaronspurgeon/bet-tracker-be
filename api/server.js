@@ -11,7 +11,7 @@ configureMiddleware(server);
 
 server.use("/auth", authRouter);
 server.use("/users", usersRouter);
-// server.use("/bets", betsRouter);
+server.use("/bets", betsRouter);
 
 server.get("/", (req, res, next) => {
   res.json({

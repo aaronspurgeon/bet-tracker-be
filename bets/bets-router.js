@@ -7,21 +7,18 @@ const router = express.Router({
 });
 
 // PRODUCT ROUTES
-router.get("/bets", async (req, res, next) => {
+router.get("/all/:userId", async (req, res, next) => {
   try {
-    const bets = await betModel.findBetByUser(req.userId);
+    const bets = await betModel.findBetByUser(req.params.userId);
     res.status(200).json(bets);
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/bets", restricted, async (req, res, next) => {
+router.post("/new", restricted, async (req, res, next) => {
   try {
-    const bet = await betModel.addBet(
-      { ...req.body, users_id: req.userId },
-      req.userId
-    );
+    const bet = await betModel.addBet({ ...req.body });
     if (bet) {
       res.status(201).json({
         message: "Bet post created",
@@ -36,15 +33,17 @@ router.post("/bets", restricted, async (req, res, next) => {
   }
 });
 
-// router.get("/bets/:id", async (req, res, next) => {
-//   try {
-//     const bet = await db("bet").where({ id: req.params.id }).first();
+router.get("/bets/:id", async (req, res, next) => {
+  try {
+    const bet = await db("bet").where({ id: req.params.id }).first();
 
-//     res.status(200).json(bet);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+    res.status(200).json(bet);
+  } catch (err) {
+    next(err);
+  }
+});
+
+module.exports = router;
 
 // router.put("/bets/:id", restricted, async (req, res, next) => {
 //   try {

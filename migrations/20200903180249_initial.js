@@ -12,7 +12,6 @@ exports.up = async (knex) => {
     table.string("opponent1").notNullable();
     table.string("opponent2").notNullable();
     table.string("win/loss").notNullable();
-    table.string("month").notNullable();
     table
       .integer("user_id")
       .references("id")
