@@ -5,13 +5,15 @@ exports.up = async (knex) => {
     users.string("lastName", 128).notNullable();
     users.string("email", 128).notNullable().unique();
     users.string("password", 1000).notNullable();
+    users.integer("wins").notNullable();
+    users.integer("loss").notNullable();
   });
 
   await knex.schema.createTable("bet", (table) => {
     table.increments("id");
     table.string("opponent1").notNullable();
     table.string("opponent2").notNullable();
-    table.string("win/loss").notNullable();
+    table.string("win_loss").notNullable();
     table
       .integer("user_id")
       .references("id")

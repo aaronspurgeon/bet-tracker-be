@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const tokenService = require("../auth/token-service.js");
 const Users = require("../users/users-model.js");
+const record = require("../record/record-model.js");
 
 router.post("/register", async (req, res, next) => {
   //   let user = req.body;
@@ -26,7 +27,7 @@ router.post("/register", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res) => {
-  let { email, password } = req.body;
+  let { email, password, wins, loss } = req.body;
 
   Users.findBy({ email })
     .first()
