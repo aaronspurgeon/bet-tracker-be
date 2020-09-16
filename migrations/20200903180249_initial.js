@@ -1,6 +1,6 @@
 exports.up = async (knex) => {
   await knex.schema.createTable("users", (users) => {
-    users.increments("id");
+    users.uuid("id").notNullable().primary();
     users.string("firstName", 128).notNullable();
     users.string("lastName", 128).notNullable();
     users.string("email", 128).notNullable().unique();
