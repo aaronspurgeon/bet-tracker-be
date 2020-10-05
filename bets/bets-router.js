@@ -16,6 +16,16 @@ router.get("/all/:userId", async (req, res, next) => {
   }
 });
 
+router.get("/:sport/:userId", async (req, res, next) => {
+  try {
+    const bets = await betModel.findBetByUser(req.params.userId);
+    const filtered = bets.filter((bet) => bet.sport === req.params.sport);
+    res.status(200).json(filtered);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post("/new", restricted, async (req, res, next) => {
   try {
     const bet = await betModel.addBet({ ...req.body });

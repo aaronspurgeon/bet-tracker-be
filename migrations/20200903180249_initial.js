@@ -14,6 +14,8 @@ exports.up = async (knex) => {
     table.string("opponent1").notNullable();
     table.string("opponent2").notNullable();
     table.string("win_loss").notNullable();
+    table.string("sport").notNullable();
+    table.string("units").notNullable();
     table
       .integer("user_id")
       .references("id")
